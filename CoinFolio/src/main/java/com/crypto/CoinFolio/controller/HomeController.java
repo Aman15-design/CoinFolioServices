@@ -10,4 +10,9 @@ public class HomeController {
     public String home(){
         return "Welcome to CoinFolio";
     }
+
+    @GetMapping("/api")
+    public String homeSecure(){
+        return "Welcome to CoinFolio Secured page";
+    }
 }
