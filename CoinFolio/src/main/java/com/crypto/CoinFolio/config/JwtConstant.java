@@ -1,9 +1,13 @@
 package com.crypto.CoinFolio.config;
 
-import com.crypto.CoinFolio.constants.constants;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+@Component
 public class JwtConstant {
-    public static final String SECRET_KEY = constants.JWT_CONSTANT;
+    
+    @Value("${jwt.secret.key}")
+    public String SECRET_KEY;
 
     public static final String JWT_HEADER = "Authorization";
 }
