@@ -24,6 +24,8 @@ import com.crypto.CoinFolio.service.CustomUserDetailsService;
 import com.crypto.CoinFolio.service.EmailService;
 import com.crypto.CoinFolio.service.TwoFactorOTPService;
 
+import jakarta.persistence.PostRemove;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -112,6 +114,7 @@ public class AuthController {
         return new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
     }
 
+    @PostMapping("/two-factor/otp/{otp}")
     public ResponseEntity<AuthResponse> verifySignInOtp(@PathVariable String otp,@RequestParam String id) throws Exception{
         TwoFactorOTP twoFactorOTP = twoFactorOTPService.findbyId(id);
         if(twoFactorOTPService.varifyTwoFactorOtp(twoFactorOTP, otp)){
