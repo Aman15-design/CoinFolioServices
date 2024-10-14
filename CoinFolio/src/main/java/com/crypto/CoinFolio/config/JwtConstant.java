@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtConstant {
     
-    @Value("${jwt.secret.key}")
-    public String SECRET_KEY;
+
+    public static String SECRET_KEY = "asfnbpngonpgowengponerbhnpoiohfqiwfnbvooiewbgvip0o2b";
 
     public static final String JWT_HEADER = "Authorization";
 }
