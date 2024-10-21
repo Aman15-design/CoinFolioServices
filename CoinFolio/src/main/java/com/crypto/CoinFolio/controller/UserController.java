@@ -1,20 +1,31 @@
 package com.crypto.CoinFolio.controller;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authorization.method.AuthorizeReturnObject;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.crypto.CoinFolio.service.VerificationCodeService;
-
+import com.crypto.CoinFolio.Utils.OtpUtils;
 import com.crypto.CoinFolio.domain.VerificationType;
+import com.crypto.CoinFolio.model.ForgotPasswordToken;
 import com.crypto.CoinFolio.model.User;
 import com.crypto.CoinFolio.model.VerificationCode;
+import com.crypto.CoinFolio.request.ForgotPasswordTokenRequest;
+import com.crypto.CoinFolio.request.ResetPasswordRequest;
+import com.crypto.CoinFolio.response.ApiResponse;
+import com.crypto.CoinFolio.response.AuthResponse;
 import com.crypto.CoinFolio.service.EmailService;
+import com.crypto.CoinFolio.service.ForgotPasswordService;
 import com.crypto.CoinFolio.service.UserService;
 
 @RestController
@@ -28,6 +39,9 @@ public class UserController {
 
     @Autowired
     private VerificationCodeService verificationCodeService;
+
+    @Autowired
+    private ForgotPasswordService forgotPasswordService;
 
     @GetMapping("/api/users/profiles")
     public ResponseEntity<User> getUserProfile(@RequestHeader("Authorization") String jwt) {
@@ -76,5 +90,40 @@ public class UserController {
             return new ResponseEntity<>(updatedUser, HttpStatus.OK);
         }
         throw new Exception("Wrong otp");
+    }
+
+    @PostMapping("/auth/users/reset-password/send-otp")
+    public ResponseEntity<AuthResponse> sendForgotPasswordOtp(@RequestBody ForgotPasswordTokenRequest forgotPasswordTokenRequest) {
+        
+        User user = userService.findUserByEmail(forgotPasswordTokenRequest.getSendTo());
+        String otp = OtpUtils.generateOtp();
+        UUID uuid = UUID.randomUUID();
+        String id = uuid.toString();
+
+        ForgotPasswordToken token = forgotPasswordService.findByUser(user.getId());
+        if(token == null){
+            token = forgotPasswordService.createToken(user, id, forgotPasswordTokenRequest.getVerificationType(), forgotPasswordTokenRequest.getSendTo());
+        }
+
+        if(forgotPasswordTokenRequest.equals(VerificationType.EMAIL)){
+            emailService.sendVerificationOTPEmail(user.getEmail(), token.getOtp());
+        }
+        AuthResponse response = new AuthResponse();
+        response.setSession(token.getId());
+        response.setMessage("Password sent successfully");
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
+    @PatchMapping("/auth/users/reset-password/verify-otp/")
+    public ResponseEntity<ApiResponse> resetPassword(@RequestHeader("Authorization") String jwt,@RequestBody ResetPasswordRequest resetPasswordRequest,@RequestParam String id) throws Exception {
+        ForgotPasswordToken forgotPasswordToken = forgotPasswordService.findById(id);
+        boolean isVerified = forgotPasswordToken.getOtp().equals(resetPasswordRequest.getOtp());
+        if(isVerified){
+            userService.updatePassword(forgotPasswordToken.getUser(), resetPasswordRequest.getPassword());
+            ApiResponse response = new ApiResponse();
+            response.setMessage("Password Updated Successfully");
+            return new ResponseEntity<>(response,HttpStatus.OK);
+        }
+        throw new Exception("Invalid OTP");
     }
 }
