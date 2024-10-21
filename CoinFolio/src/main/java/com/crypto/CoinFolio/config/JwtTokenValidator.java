@@ -31,7 +31,7 @@ public class JwtTokenValidator extends OncePerRequestFilter {
             jwt = jwt.substring(7); // Remove 'Bearer ' prefix
 
             try {
-                SecretKey key = Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes()); // Ensure this key is at least
+                SecretKey key = Keys.hmacShaKeyFor(JwtConstant.getSecretKey().getBytes()); // Ensure this key is at least
                                                                                        // 256-bit for HS256
 
                 Claims claims = Jwts.parserBuilder()

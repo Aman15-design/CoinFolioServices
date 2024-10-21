@@ -12,7 +12,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
 public class JwtProvider {
-    private static SecretKey key = Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
+    private static SecretKey key = Keys.hmacShaKeyFor(JwtConstant.getSecretKey().getBytes());
 
     public static String generateToken(Authentication auth){
         Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
