@@ -8,4 +8,5 @@ Open your VS Code workspace.
 2. At the top of the Run and Debug sidebar, click the gear icon (⚙) to open or create the launch.json file.
 3. In the launch.json, under the configurations section, add or modify the env key with your environment variable.
 
-![image](https://github.com/user-attachments/assets/6fa06b71-7ce9-4838-9e76-df51b9518ffb)
+![image](https://github.com/user-attachments/assets/7cbe4848-27e6-4e90-9407-0704f253c655)
+
