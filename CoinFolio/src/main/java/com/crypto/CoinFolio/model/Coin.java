@@ -2,9 +2,12 @@ package com.crypto.CoinFolio.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Transient;
 import lombok.Data;
 
+@Entity
 @Data
 public class Coin {
 
@@ -81,6 +84,7 @@ public class Coin {
     @JsonProperty("atl_date")
     private String atlDate; // Consider using LocalDateTime if you're working with dates
 
+    @Transient
     @JsonProperty("roi")
     private Object roi; // Nullable; can be of a specific type based on your requirements
 
