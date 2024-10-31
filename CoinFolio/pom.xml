@@ -87,6 +87,16 @@
 			<version>0.11.5</version>
 			<scope>runtime</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>okhttp</artifactId>
+			<version>4.10.0</version> <!-- Use the latest stable version -->
+		</dependency>	
+		<dependency>
+			<groupId>com.konghq</groupId>
+			<artifactId>unirest-java</artifactId>
+			<version>3.11.11</version> <!-- Use the latest stable version -->
+		</dependency>			
 		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
