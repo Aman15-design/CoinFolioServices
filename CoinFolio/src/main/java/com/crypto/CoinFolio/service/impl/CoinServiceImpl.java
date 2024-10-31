@@ -1,12 +1,9 @@
 package com.crypto.CoinFolio.service.impl;
 
-import java.net.http.HttpResponse;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.el.stream.Optional;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.internal.util.collections.ConcurrentReferenceHashMap.Option;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,11 +29,11 @@ public class CoinServiceImpl implements CoinService {
     private ObjectMapper objectMapper;
 
     @Override
-    public List<Coin> getCoinList(int page) {
+    public List<Coin> getCoinList(int page, String apiKey) {
         kong.unirest.HttpResponse<String> response = Unirest
                 .get("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd")
                 .header("accept", "application/json")
-                .header("x-cg-demo-api-key", "CG-NKcvLJG6zrc5LbPijBsFV9jL")
+                .header("x-cg-demo-api-key", apiKey) //CG-NKcvLJG6zrc5LbPijBsFV9jL
                 .queryString("page", page) // Add pagination if supported by the API
                 .queryString("per_page", 10) // Adjust per_page value as needed
                 .asString();
@@ -61,11 +58,11 @@ public class CoinServiceImpl implements CoinService {
     }
 
     @Override
-    public String getMarketChart(String coinId, int days) throws Exception {
+    public String getMarketChart(String coinId, int days, String apiKey) throws Exception {
         kong.unirest.HttpResponse<String> response = Unirest
                 .get("https://api.coingecko.com/api/v3/coins/" + coinId + "/market_chart?vs_currency=usd&days=" + days)
                 .header("accept", "application/json")
-                .header("x-cg-demo-api-key", "CG-NKcvLJG6zrc5LbPijBsFV9jL")
+                .header("x-cg-demo-api-key", apiKey) //CG-NKcvLJG6zrc5LbPijBsFV9jL
                 .queryString("days", days) // Add pagination if supported by the API
                 .asString();
 
@@ -81,10 +78,10 @@ public class CoinServiceImpl implements CoinService {
     }
 
     @Override
-    public String getCoinDetails(String coinId) throws Exception {
+    public String getCoinDetails(String coinId, String apiKey) throws Exception {
         kong.unirest.HttpResponse<String> response = Unirest.get("https://api.coingecko.com/api/v3/coins/" + coinId)
                 .header("accept", "application/json")
-                .header("x-cg-demo-api-key", "CG-NKcvLJG6zrc5LbPijBsFV9jL")
+                .header("x-cg-demo-api-key", apiKey) //CG-NKcvLJG6zrc5LbPijBsFV9jL
                 .asString();
 
         // Check if the response status is 200 OK
@@ -130,11 +127,11 @@ public class CoinServiceImpl implements CoinService {
     }
 
     @Override
-    public String searchCoin(String keyWord) {
+    public String searchCoin(String keyWord, String apiKey) {
         kong.unirest.HttpResponse<String> response = Unirest
                 .get("https://api.coingecko.com/api/v3/search?query=" + keyWord)
                 .header("accept", "application/json")
-                .header("x-cg-demo-api-key", "CG-NKcvLJG6zrc5LbPijBsFV9jL")
+                .header("x-cg-demo-api-key", apiKey) //CG-NKcvLJG6zrc5LbPijBsFV9jL
                 .asString();
 
         // Check if the response status is 200 OK
@@ -155,11 +152,11 @@ public class CoinServiceImpl implements CoinService {
     }
 
     @Override
-    public String getTop50CoinsByMarketCapRank() {
+    public String getTop50CoinsByMarketCapRank(String apiKey) {
         kong.unirest.HttpResponse<String> response = Unirest
                 .get("https://api.coingecko.com/api/v3/coins/markets/?vs_currency=usd&per_page=50&page=1")
                 .header("accept", "application/json")
-                .header("x-cg-demo-api-key", "CG-NKcvLJG6zrc5LbPijBsFV9jL")
+                .header("x-cg-demo-api-key", apiKey) //CG-NKcvLJG6zrc5LbPijBsFV9jL
                 .asString();
 
         // Check if the response status is 200 OK
@@ -181,11 +178,11 @@ public class CoinServiceImpl implements CoinService {
     }
 
     @Override
-    public String getTrendingCoins() {
+    public String getTrendingCoins(String apiKey) {
         kong.unirest.HttpResponse<String> response = Unirest
                 .get("https://api.coingecko.com/api/v3/search/trending")
                 .header("accept", "application/json")
-                .header("x-cg-demo-api-key", "CG-NKcvLJG6zrc5LbPijBsFV9jL")
+                .header("x-cg-demo-api-key", apiKey) //CG-NKcvLJG6zrc5LbPijBsFV9jL
                 .asString();
 
         // Check if the response status is 200 OK
