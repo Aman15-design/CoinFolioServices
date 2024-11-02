@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.crypto.CoinFolio.domain.OrderType;
 import com.crypto.CoinFolio.model.Order;
 import com.crypto.CoinFolio.model.User;
 import com.crypto.CoinFolio.model.Wallet;
@@ -69,9 +70,21 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
-    public Wallet payOrderPayment(Order order, User user) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'payOrderPayment'");
+    public Wallet payOrderPayment(Order order, User user) throws Exception {
+        Wallet wallet = getUserWallet(user);
+
+        if(order.getOrderType().equals(OrderType.BUY)){
+            Double newBalance = wallet.getBalance() - order.getPrice();
+            if(newBalance <= 0){
+                throw new Exception("Insufficient Funds for transactions");
+            } 
+            wallet.setBalance(newBalance);
+        } else {
+            Double newBalance = wallet.getBalance() + order.getPrice();
+            wallet.setBalance(newBalance);
+        }
+        walletRepository.save(wallet);
+        return wallet;
     }
     
 }
