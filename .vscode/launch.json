@@ -16,9 +16,6 @@
             "request": "launch",
             "mainClass": "com.crypto.CoinFolio.CoinFolioApplication",
             "projectName": "CoinFolio",
-            "env": {
-                "JWT_SECRET_KEY": "hfeiqwviwebvibqopewnofqwegnowerqnrgoqowerngopq"
-            }
         }
     ]
 }
